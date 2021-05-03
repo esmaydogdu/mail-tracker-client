@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "mail-tracker",
+  "name": "Track your emails ease.",
   "icons": [
     {
       "src": "favicon.ico",
