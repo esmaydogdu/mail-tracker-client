@@ -1,5 +1,15 @@
 import { Component } from 'react'
 
+const env = 'prod'
+const BASE = {
+  local: 'http://localhost:9000',
+  prod: 'https://mail-tracker-server.herokuapp.com'
+}
+
+const getApiUrl = () =>{
+   return BASE[env]
+}
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -9,16 +19,30 @@ class App extends Component {
     }
   }
   async handleClick(e) {
-    const response = await fetch('https://mail-tracker-server.herokuapp.com/api')
+    // const response = await fetch('https://mail-tracker-server.herokuapp.com/api')
+    const response = await fetch(`${getApiUrl()}/api`)
     const json = await response.json()
     this.setState(json)
   }
 
   async handleCheck(e) {
-    const response = await fetch(`https://mail-tracker-server.herokuapp.com/api/check/${this.state.key}`)
+    // const response = await fetch(`https://mail-tracker-server.herokuapp.com/api/check/${this.state.key}`)
+    const response = await fetch(`${getApiUrl()}/api/check/${this.state.key}`)
     const json = await response.json()
     //take the views
     this.setState(json)
+  }
+
+  handleCopy(e) {
+   document.getElementById('copyIndicator').innerText = 'Copied!'
+    const copyText = document.getElementById('copyText').innerText
+    const temp = document.createElement("INPUT");
+    temp.value = copyText;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    document.getElementById('note').innerText = 'Please place this link in your preffered mail application as an image url and you are good to go!'
   }
 
 
@@ -34,9 +58,10 @@ class App extends Component {
           }
         </div>
         <div className="space">{this.state.key.length > 0 &&
-          <div className="copy-link-wrapper border">
-            <span>{`https://mail-tracker-server.herokuapp.com/api/track/${this.state.key}`}</span>
-            <span>Copy</span>
+          <div className="copy-link-wrapper border" onClick={(e) => this.handleCopy(e)}>
+          <span id='copyText'>{`${getApiUrl()}/api/track/${this.state.key}`}</span>
+            <span id='copyIndicator'>Copy</span>
+          <b className='copyDesc' id='note'></b>
           </div>}
         </div>
         <div>
