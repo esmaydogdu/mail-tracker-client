@@ -13,7 +13,7 @@ const getApiUrl = () => {
 class App extends Component {
   constructor(props) {
     super(props)
-    this.timeout = null
+    this.interval = null
     this.state = {
       key: "",
       views: [],
@@ -25,13 +25,13 @@ class App extends Component {
     const json = await response.json()
     this.setState(json)
 
-    this.timeout = setInterval(() => {
+    this.interval = setInterval(() => {
       this.handleCheck()
     }, 5000);
   }
 
   componentWillUnmount(){
-    clearInterval(this.timeout)
+    clearInterval(this.interval)
   }
 
   async handleCheck(e) {
