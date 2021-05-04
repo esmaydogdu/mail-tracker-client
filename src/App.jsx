@@ -13,6 +13,7 @@ const getApiUrl = () => {
 class App extends Component {
   constructor(props) {
     super(props)
+    this.timeout = null
     this.state = {
       key: "",
       views: [],
@@ -23,6 +24,14 @@ class App extends Component {
     const response = await fetch(`${getApiUrl()}/api`)
     const json = await response.json()
     this.setState(json)
+
+    this.timeout = setInterval(() => {
+      this.handleCheck()
+    }, 5000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timeout)
   }
 
   async handleCheck(e) {
@@ -43,6 +52,7 @@ class App extends Component {
     temp.remove();
     document.getElementById("note").innerText = "Please place this link in your preffered mail application as an image url and you are good to go!"
   }
+
 
 
   render() {
