@@ -72,7 +72,7 @@ class App extends Component {
         </div>
         <div className="space">{this.state.key.length > 0 &&
           <div className="copy-link-wrapper border" onClick={(e) => this.handleCopy(e)}>
-          <span className="ellipsis" id="copyText">{`${getApiUrl()}/api/track/${this.state.key}`}</span>
+            <span className="ellipsis" id="copyText">{`${getApiUrl()}/api/track/${this.state.key}`}</span>
             <span id="copyIndicator">Copy</span>
           </div>}
         </div>
