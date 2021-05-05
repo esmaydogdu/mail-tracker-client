@@ -30,7 +30,7 @@ class App extends Component {
     }, 5000);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.interval)
   }
 
@@ -73,19 +73,21 @@ class App extends Component {
           </div>}
         </div>
         <b className="copyDesc space" id="note"></b>
-        <div>
-          {this.state.views.length > 0 && <h1>Views:</h1>}
+        {this.state.views.length > 0 && (
           <div>
-            {
-              this.state.views.map((view) => {
-                let date = new Date(view.date)
-                return (
-                  <div className="space" key={view.date.toString()}>viewed at {date.toLocaleString()} from {view.location.city} via {view.ua.browser.name}</div>
-                )
-              })
-            }
+            <h1>Views:</h1>
+            <div className="border scroll-view">
+              {
+                this.state.views.map((view) => {
+                  let date = new Date(view.date)
+                  return (
+                    <div key={view.date.toString()}>viewed at {date.toLocaleString()} from {view.location.city} via {view.ua.browser.name}</div>
+                  )
+                })
+              }
+            </div>
           </div>
-        </div>
+        )}
 
 
       </div>

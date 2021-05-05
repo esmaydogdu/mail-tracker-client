@@ -53,3 +53,8 @@ body {
   justify-content: space-between;
   padding: 20px;
 }
+
+.scroll-view {
+  overflow: auto;
+  max-height: 50vh;
+}
