@@ -4,6 +4,13 @@
   margin-top: $space-top;
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .border {
   border: $border-style;
 }
