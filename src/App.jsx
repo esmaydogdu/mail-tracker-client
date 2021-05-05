@@ -13,6 +13,7 @@ const getApiUrl = () => {
 class App extends Component {
   constructor(props) {
     super(props)
+    this.interval = null
     this.state = {
       key: "",
       views: [],
@@ -23,24 +24,36 @@ class App extends Component {
     const response = await fetch(`${getApiUrl()}/api`)
     const json = await response.json()
     this.setState(json)
+
+    if (!this.interval) {
+      this.interval = setInterval(() => {
+        this.handleCheck()
+      }, 5000)
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
   async handleCheck(e) {
+
     const response = await fetch(`${getApiUrl()}/api/check/${this.state.key}`)
     const json = await response.json()
     //take the views
     this.setState(json)
+
   }
 
   handleCopy(e) {
     document.getElementById("copyIndicator").innerText = "Copied!"
     const copyText = document.getElementById("copyText").innerText
-    const temp = document.createElement("INPUT");
-    temp.value = copyText;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand("copy");
-    temp.remove();
+    const temp = document.createElement("INPUT")
+    temp.value = copyText
+    document.body.appendChild(temp)
+    temp.select()
+    document.execCommand("copy")
+    temp.remove()
     document.getElementById("note").innerText = "Please place this link in your preffered mail application as an image url and you are good to go!"
   }
 
