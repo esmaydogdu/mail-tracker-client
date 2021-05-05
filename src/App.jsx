@@ -58,6 +58,7 @@ class App extends Component {
   }
 
 
+
   render() {
     return (
       <div className="container">
@@ -71,24 +72,26 @@ class App extends Component {
         </div>
         <div className="space">{this.state.key.length > 0 &&
           <div className="copy-link-wrapper border" onClick={(e) => this.handleCopy(e)}>
-            <span id="copyText">{`${getApiUrl()}/api/track/${this.state.key}`}</span>
+          <span className="ellipsis" id="copyText">{`${getApiUrl()}/api/track/${this.state.key}`}</span>
             <span id="copyIndicator">Copy</span>
           </div>}
         </div>
         <b className="copyDesc space" id="note"></b>
-        <div>
-          {this.state.views.length > 0 && <h1>Views:</h1>}
+        {this.state.views.length > 0 && (
           <div>
-            {
-              this.state.views.map((view) => {
-                let date = new Date(view.date)
-                return (
-                  <div className="space" key={view.date.toString()}>viewed at {date.toLocaleString()} from {view.location.city} via {view.ua.browser.name}</div>
-                )
-              })
-            }
+            <h1>Views:</h1>
+            <div className="border scroll-view">
+              {
+                this.state.views.map((view) => {
+                  let date = new Date(view.date)
+                  return (
+                    <div key={view.date.toString()}>viewed at {date.toLocaleString()} from {view.location.city} via {view.ua.browser.name}</div>
+                  )
+                })
+              }
+            </div>
           </div>
-        </div>
+        )}
 
 
       </div>
