@@ -56,5 +56,16 @@ body {
 
 .scroll-view {
   overflow: auto;
+  padding: 20px;
+  min-height: 20vh;
   max-height: 50vh;
+  > div {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+#copyIndicator {
+  margin-left: 10px;
 }
