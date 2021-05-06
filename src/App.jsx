@@ -16,6 +16,7 @@ class App extends Component {
     this.interval = null
     this.state = {
       key: "",
+      password: "",
       views: [],
     }
   }
@@ -24,6 +25,10 @@ class App extends Component {
     const response = await fetch(`${getApiUrl()}/api`)
     const json = await response.json()
     this.setState(json)
+    const url = new URL(window.location)
+    url.searchParams.set('key', json.key)
+    url.searchParams.set('password', json.password || 'test')
+    window.history.pushState({}, '', url)
 
     if (!this.interval) {
       this.interval = setInterval(() => {
@@ -36,9 +41,23 @@ class App extends Component {
     clearInterval(this.interval)
   }
 
+  componentDidMount() {
+    const url = new URL(window.location)
+    const key = url.searchParams.get('key')
+    const password = url.searchParams.get('password')
+    if (key && password) {
+      this.setState({ key, password })
+      if (!this.interval) {
+        this.interval = setInterval(() => {
+          this.handleCheck()
+        }, 5000)
+      }
+    }
+  }
+
   async handleCheck(e) {
 
-    const response = await fetch(`${getApiUrl()}/api/check/${this.state.key}`)
+    const response = await fetch(`${getApiUrl()}/api/check/${this.state.key}/${this.state.password}`)
     const json = await response.json()
     //take the views
     this.setState(json)
@@ -57,6 +76,18 @@ class App extends Component {
     document.getElementById("note").innerText = "Please place this link in your preffered mail application as an image url and you are good to go!"
   }
 
+  handleBookmark(e) {
+    if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+      window.sidebar.addPanel(document.title, window.location.href, '');
+    } else if (window.external && ('AddFavorite' in window.external)) { // IE Favorite
+      window.external.AddFavorite(window.location.href, document.title);
+    } else if (window.opera && window.print) { // Opera Hotlist
+      this.title = document.title;
+      return true;
+    } else { // webkit - safari/chrome
+      alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') != -1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
+    }
+  }
 
 
   render() {
@@ -67,7 +98,7 @@ class App extends Component {
             this.state.key.length === 0 ?
               <button className="button space" onClick={(e) => this.handleClick(e)}>Gimme Tracker</button>
               :
-              <button className="button space" onClick={(e) => this.handleCheck(e)}>Refresh To See!</button>
+              <button className="button space" onClick={(e) => this.handleBookmark(e)}>Add your address to bookmark!</button>
           }
         </div>
         <div className="space">{this.state.key.length > 0 &&
